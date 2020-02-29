@@ -1,5 +1,14 @@
 
 fn git [@git-args]{
+
+  fn null_out [f]{
+    { $f 2>&- > /dev/null }
+  }
+
+  fn has_failed [p]{
+    eq (bool ?(null_out $p)) $false
+  }
+
   try {
 
     if (eq $git-args [conflicts]) {
@@ -16,8 +25,14 @@ fn git [@git-args]{
       e:git
     } else {
       h @rest = $@git-args
-      if (eq $h diff) {
-        customGitDiff $@rest
+      if (and ( has-env KITTY_WINDOW_ID ) ( eq $h diff ) ) {
+
+        if (not (has_failed { e:git diff $@rest }) ) {
+          e:git -c difftool.kitty.cmd="kitty +kitten diff $LOCAL $REMOTE" -c diff.tool="kitty" difftool --no-symlinks --dir-diff $@rest 2> /dev/null
+        } else {
+          e:git diff $@rest
+        }
+
       } elif (eq $h new) {
         branch @more = $@rest
         e:git checkout -b $branch
