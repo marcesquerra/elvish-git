@@ -11,8 +11,8 @@ fn git [@git-args]{
 
   try {
 
-    if (eq $git-args [conflicts]) {
-      e:git log --graph --decorate --pretty=oneline --abbrev-commit
+    if (eq $git-args [tree]) {
+      e:git log --graph --decorate --pretty=oneline --abbrev-commit --all
     } elif (eq $git-args [root]) {
       e:git rev-parse --show-toplevel
     } elif (eq $git-args [conflicts]) {
