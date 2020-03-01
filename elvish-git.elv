@@ -15,7 +15,7 @@ fn git [@git-args]{
     if (eq $git-args [tree]) {
       e:git log --graph --decorate --pretty=oneline --abbrev-commit --all
     } elif (eq $git-args [log]) {
-      e:git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+      e:git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset%n           %s%n           %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --abbrev=8
     } elif (eq $git-args [root]) {
       e:git rev-parse --show-toplevel
     } elif (eq $git-args [conflicts]) {
