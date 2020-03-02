@@ -1,6 +1,10 @@
 
 fn git [@git-args]{
 
+  fn exception-msg [e]{
+    put ( echo $e[ cause ] )[9:-1]
+  }
+
   fn null_out [f]{
     { $f 2>&- > /dev/null }
   }
@@ -9,8 +13,9 @@ fn git [@git-args]{
     eq (bool ?(null_out $p)) $false
   }
 
-  try {
+  success = $ok
 
+  try {
 
     if (eq $git-args [tree]) {
       e:git log --graph --decorate --pretty=oneline --abbrev-commit --all
@@ -45,7 +50,13 @@ fn git [@git-args]{
       }
     }
 
-  } except exception {
-    fail "git failed"
+  } except e {
+    success = $e
   }
+
+  if (eq $ok $success) { return }
+
+  fail (exception-msg $success)
+
+
 }
