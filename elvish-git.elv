@@ -2,7 +2,7 @@
 fn git [@git-args]{
 
   fn exception-msg [e]{
-    put ( echo $e[ cause ] )[9:-1]
+    put (to-string $e)[7:-1]
   }
 
   fn null_out [f]{
